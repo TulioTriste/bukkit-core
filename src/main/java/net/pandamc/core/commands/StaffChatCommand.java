@@ -52,6 +52,7 @@ public class StaffChatCommand extends Command {
         String json = new RedisMessage(Payload.STAFF_CHAT)
                 .setParam("PLAYER", player.getName())
                 .setParam("PREFIX", Core.get().getChat().getPlayerPrefix(player))
+                .setParam("SERVER", Core.get().getServerName())
                 .setParam("MESSAGE", message.toString())
                 .toJSON();
         Core.get().getRedisManager().write(json);

@@ -3,6 +3,7 @@ package net.pandamc.core;
 import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.pandamc.core.commands.CoreReloadCommand;
 import net.pandamc.core.commands.StaffChatCommand;
 import net.pandamc.core.listeners.PlayerListener;
 import net.pandamc.core.listeners.StaffListener;
@@ -46,7 +47,8 @@ import java.util.Arrays;
     }
 
     private void registerCommands() {
-        Arrays.asList(new StaffChatCommand()).forEach(commands ->
+        Arrays.asList(new StaffChatCommand(),
+                new CoreReloadCommand()).forEach(commands ->
                 registerCommand(commands, getName()));
     }
 
@@ -58,7 +60,7 @@ import java.util.Arrays;
 
     private void loadVault() {
         RegisteredServiceProvider<Chat> provider = getServer().getServicesManager().getRegistration(Chat.class);
-        if(provider != null) {
+        if (provider != null) {
             chat = provider.getProvider();
         }
     }

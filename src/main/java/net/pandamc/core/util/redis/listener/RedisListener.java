@@ -25,19 +25,21 @@ public class RedisListener extends JedisPubSub {
                     case STAFF_JOIN:
                         String player = redisMessage.getParam("PLAYER");
                         String prefixPlayer = redisMessage.getParam("PREFIX");
+                        String server = redisMessage.getParam("SERVER");
                         Bukkit.getOnlinePlayers().forEach(players -> {
                             if (players.hasPermission("bukkit.core.staff")) {
-                                players.sendMessage(CC.translate("&9[Staff] &7(" + plugin.getServerName() + ") " + prefixPlayer + player + " &bhas joined"));
+                                players.sendMessage(CC.translate("&9[Staff] &7(" + server + ") " + prefixPlayer + player + " &bhas joined"));
                             }
                         });
                         break;
                     case STAFF_CHAT:
                         String player1 = redisMessage.getParam("PLAYER");
                         String prefixPlayer1 = redisMessage.getParam("PREFIX");
+                        String server1 = redisMessage.getParam("SERVER");
                         String message1 = redisMessage.getParam("MESSAGE");
                         Bukkit.getOnlinePlayers().forEach(players -> {
                             if (players.hasPermission("bukkit.core.staff")) {
-                                players.sendMessage(CC.translate("&9[Staff] &7(" + plugin.getServerName() + ") " + prefixPlayer1 + player1+ "&7: &r" + message1));
+                                players.sendMessage(CC.translate("&9[Staff] &7(" + server1 + ") " + prefixPlayer1 + player1+ "&7: &r" + message1));
                             }
                         });
                         break;
