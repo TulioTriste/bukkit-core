@@ -1,0 +1,4 @@
+main: net.pandamc.core.Core
+name: BukkitCore
+version: 1.0-SNAPSHOT
+author: TulioTriste
