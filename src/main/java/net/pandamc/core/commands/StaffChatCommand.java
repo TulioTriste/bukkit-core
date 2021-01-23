@@ -47,7 +47,7 @@ public class StaffChatCommand extends Command {
         }
         StringBuilder message = new StringBuilder();
         for (String string : strings) {
-            message.append(string);
+            message.append(string).append(" ");
         }
         String json = new RedisMessage(Payload.STAFF_CHAT)
                 .setParam("PLAYER", player.getName())
