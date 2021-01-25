@@ -9,6 +9,8 @@ import net.pandamc.core.listeners.PlayerListener;
 import net.pandamc.core.listeners.StaffListener;
 import net.pandamc.core.util.file.type.BasicConfigurationFile;
 import net.pandamc.core.util.redis.Redis;
+import net.pandamc.core.util.redis.impl.Payload;
+import net.pandamc.core.util.redis.util.RedisMessage;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,10 +30,12 @@ import java.util.Arrays;
         registerManagers();
         registerListeners();
         registerCommands();
+        sendInfoLoad();
     }
 
     @Override
     public void onDisable() {
+        sendInfoClosed();
         redisManager.disconnect();
     }
 
@@ -63,6 +67,20 @@ import java.util.Arrays;
         if (provider != null) {
             chat = provider.getProvider();
         }
+    }
+
+    private void sendInfoLoad() {
+        String json = new RedisMessage(Payload.LOAD_SERVER)
+                .setParam("SERVER", getServerName())
+                .toJSON();
+        redisManager.write(json);
+    }
+
+    private void sendInfoClosed() {
+        String json = new RedisMessage(Payload.DISABLE_SERVER)
+                .setParam("SERVER", getServerName())
+                .toJSON();
+        redisManager.write(json);
     }
 
     private void registerCommand(Command cmd, String fallbackPrefix) {

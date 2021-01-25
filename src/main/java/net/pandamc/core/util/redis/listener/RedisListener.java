@@ -43,6 +43,22 @@ public class RedisListener extends JedisPubSub {
                             }
                         });
                         break;
+                    case LOAD_SERVER:
+                        String server2 = redisMessage.getParam("SERVER");
+                        Bukkit.getOnlinePlayers().forEach(players -> {
+                            if (players.hasPermission("bungee.core.admin") || players.isOnline()) {
+                                players.sendMessage(CC.translate("&9[" + server2 + "] &bhas been &aOpened&9!"));
+                            }
+                        });
+                        break;
+                    case DISABLE_SERVER:
+                        String server3 = redisMessage.getParam("SERVER");
+                        Bukkit.getOnlinePlayers().forEach(players -> {
+                            if (players.hasPermission("bungee.core.admin") || players.isOnline()) {
+                                players.sendMessage(CC.translate("&9[" + server3 + "] &bhas been &cClosed&9!"));
+                            }
+                        });
+                        break;
                     default:
                         Core.get().getLogger().info("[Redis] The message was received, but there was no response");
                         break;
