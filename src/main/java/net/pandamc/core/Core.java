@@ -4,10 +4,12 @@ import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.pandamc.core.commands.CoreReloadCommand;
+import net.pandamc.core.commands.ServerMonitorCommand;
 import net.pandamc.core.commands.StaffChatCommand;
 import net.pandamc.core.listeners.PlayerListener;
 import net.pandamc.core.listeners.StaffListener;
 import net.pandamc.core.util.file.type.BasicConfigurationFile;
+import net.pandamc.core.util.menu.MenuListener;
 import net.pandamc.core.util.redis.Redis;
 import net.pandamc.core.util.redis.impl.Payload;
 import net.pandamc.core.util.redis.util.RedisMessage;
@@ -52,14 +54,16 @@ import java.util.Arrays;
 
     private void registerCommands() {
         Arrays.asList(new StaffChatCommand(),
-                new CoreReloadCommand()).forEach(commands ->
-                registerCommand(commands, getName()));
+                new CoreReloadCommand(),
+                new ServerMonitorCommand())
+                .forEach(commands -> registerCommand(commands, getName()));
     }
 
     private void registerListeners() {
         Arrays.asList(new StaffListener(),
-                new PlayerListener()).forEach(listener ->
-                        getServer().getPluginManager().registerEvents(listener, this));
+                new PlayerListener(),
+                new MenuListener())
+                .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
     private void loadVault() {
