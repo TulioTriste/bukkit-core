@@ -14,8 +14,8 @@ import java.util.Arrays;
 @AllArgsConstructor
 public class PageButton extends Button {
 
-	private int mod;
-	private PaginatedMenu menu;
+	private final int mod;
+	private final PaginatedMenu menu;
 
 	@Override
 	public ItemStack getButtonItem(Player player) {

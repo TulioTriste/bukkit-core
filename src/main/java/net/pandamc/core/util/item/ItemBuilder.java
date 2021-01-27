@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ItemBuilder implements Listener {
 
-	private ItemStack is;
+	private final ItemStack is;
 
 	public ItemBuilder(Material mat) {
 		is = new ItemStack(mat);

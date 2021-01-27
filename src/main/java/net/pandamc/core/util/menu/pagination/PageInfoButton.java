@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 @AllArgsConstructor
 public class PageInfoButton extends Button {
 
-	private PaginatedMenu menu;
+	private final PaginatedMenu menu;
 
 	@Override
 	public ItemStack getButtonItem(Player player) {

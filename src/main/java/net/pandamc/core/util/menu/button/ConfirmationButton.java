@@ -15,9 +15,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 @AllArgsConstructor
 public class ConfirmationButton extends Button {
 
-	private boolean confirm;
-	private TypeCallback<Boolean> callback;
-	private boolean closeAfterResponse;
+	private final boolean confirm;
+	private final TypeCallback<Boolean> callback;
+	private final boolean closeAfterResponse;
 
 	@Override
 	public ItemStack getButtonItem(Player player) {

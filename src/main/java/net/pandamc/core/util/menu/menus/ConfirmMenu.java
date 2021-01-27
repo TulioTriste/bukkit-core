@@ -11,10 +11,10 @@ import java.util.Map;
 
 public class ConfirmMenu extends Menu {
 
-	private String title;
-	private TypeCallback<Boolean> response;
-	private boolean closeAfterResponse;
-	private Button[] centerButtons;
+	private final String title;
+	private final TypeCallback<Boolean> response;
+	private final boolean closeAfterResponse;
+	private final Button[] centerButtons;
 
 	public ConfirmMenu(String title, TypeCallback<Boolean> response, boolean closeAfter, Button... centerButtons) {
 		this.title = title;

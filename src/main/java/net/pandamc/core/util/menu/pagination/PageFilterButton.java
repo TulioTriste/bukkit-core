@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PageFilterButton<T> extends Button {
 
-	private FilterablePaginatedMenu<T> menu;
+	private final FilterablePaginatedMenu<T> menu;
 
 	@Override
 	public ItemStack getButtonItem(Player player) {

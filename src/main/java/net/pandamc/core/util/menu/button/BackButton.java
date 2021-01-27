@@ -15,7 +15,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public class BackButton extends Button {
 
-	private Menu back;
+	private final Menu back;
 
 	@Override
 	public ItemStack getButtonItem(Player player) {

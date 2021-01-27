@@ -1,5 +1,6 @@
 package net.pandamc.core;
 
+import com.lunarclient.bukkitapi.LunarClientAPI;
 import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
@@ -19,12 +20,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 
-@Getter public class Core extends JavaPlugin {
+@Getter
+public class Core extends JavaPlugin {
 
     private BasicConfigurationFile mainConfig;
     private Redis redisManager;
     private String serverName;
     private Chat chat;
+
+    public static Core get() {
+        return getPlugin(Core.class);
+    }
 
     @Override
     public void onEnable() {
@@ -46,6 +52,7 @@ import java.util.Arrays;
     }
 
     private void registerManagers() {
+        new LunarClientAPI(this);
         loadVault();
         redisManager = new Redis();
         redisManager.connect();
@@ -89,9 +96,5 @@ import java.util.Arrays;
 
     private void registerCommand(Command cmd, String fallbackPrefix) {
         MinecraftServer.getServer().server.getCommandMap().register(cmd.getName(), fallbackPrefix, cmd);
-    }
-
-    public static Core get() {
-        return getPlugin(Core.class);
     }
 }

@@ -14,8 +14,8 @@ public class RedisMessage {
      */
 
     @Getter
-    private Payload payload;
-    private Map<String, String> params;
+    private final Payload payload;
+    private final Map<String, String> params;
 
     public RedisMessage(Payload payload) {
         this.payload = payload;
