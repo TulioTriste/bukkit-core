@@ -61,23 +61,23 @@ public class RedisListener extends JedisPubSub {
                         break;
                     case CLOSE_SERVER:
                         String server4 = redisMessage.getParam("SERVER");
-                        if (Core.get().getServerName().equals(server4)) {
+                        if (plugin.getServerName().equals(server4)) {
                             Bukkit.shutdown();
                         }
                         break;
                     case ENABLE_WHITELIST:
                         String server5 = redisMessage.getParam("SERVER");
-                        if (Core.get().getServerName().equals(server5)) Bukkit.setWhitelist(true);
+                        if (plugin.getServerName().equals(server5)) Bukkit.setWhitelist(true);
                         break;
                     case DISABLE_WHITELIST:
                         String server6 = redisMessage.getParam("SERVER");
-                        if (Core.get().getServerName().equals(server6)) Bukkit.setWhitelist(false);
+                        if (plugin.getServerName().equals(server6)) Bukkit.setWhitelist(false);
                         break;
                     default:
-                        Core.get().getLogger().info("[Redis] The message was received, but there was no response");
+                        plugin.getLogger().info("[Redis] The message was received, but there was no response");
                         break;
                 }
             }
-        }.runTask(Core.get());
+        }.runTask(plugin);
     }
 }

@@ -207,7 +207,6 @@ public final class LunarClientAPI implements Listener
     private static String getMessageChannel() {
         if (LunarClientAPI.messageChannel == null) {
             String bukkitVersion = Bukkit.getServer().getBukkitVersion();
-            bukkitVersion = bukkitVersion.substring(0, bukkitVersion.indexOf(45));
             final Version ver = new Version(bukkitVersion);
             if (ver.compareTo(new Version("1.13")) >= 0) {
                 LunarClientAPI.messageChannel = "lunarclient:pm";

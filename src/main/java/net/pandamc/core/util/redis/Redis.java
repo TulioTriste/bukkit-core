@@ -33,7 +33,7 @@ public class Redis {
                 if (password != null || !password.equals(Strings.EMPTY))
                     jedis.auth(this.password);
             this.redisListener = new RedisListener();
-            (new Thread(() -> jedis.subscribe(this.redisListener, "tags"))).start();
+            (new Thread(() -> jedis.subscribe(this.redisListener, "bukkit-core"))).start();
             jedis.connect();
             active = true;
             Core.get().getLogger().info("Successfully redis connection.");
@@ -44,22 +44,17 @@ public class Redis {
     }
 
     public void disconnect() {
-        jedisPool.destroy();
         this.redisListener.unsubscribe();
+        jedisPool.destroy();
     }
 
     public void write(String json){
-        Jedis jedis = this.jedisPool.getResource();
-        try {
-            if (auth){
+        try (Jedis jedis = this.jedisPool.getResource()) {
+            if (auth) {
                 if (password != null || !password.equals(""))
                     jedis.auth(this.password);
             }
-            jedis.publish("tags", json);
-        } finally {
-            if (jedis != null){
-                jedis.close();
-            }
+            jedis.publish("bukkit-core", json);
         }
     }
 }
