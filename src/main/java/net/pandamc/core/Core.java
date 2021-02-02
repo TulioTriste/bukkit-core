@@ -4,11 +4,10 @@ import com.lunarclient.bukkitapi.LunarClientAPI;
 import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.pandamc.core.commands.CoreReloadCommand;
-import net.pandamc.core.commands.ServerMonitorCommand;
-import net.pandamc.core.commands.StaffChatCommand;
+import net.pandamc.core.commands.*;
 import net.pandamc.core.listeners.PlayerListener;
 import net.pandamc.core.listeners.StaffListener;
+import net.pandamc.core.toggle.PrivateMessageCommand;
 import net.pandamc.core.util.file.type.BasicConfigurationFile;
 import net.pandamc.core.util.menu.MenuListener;
 import net.pandamc.core.util.redis.Redis;
@@ -62,7 +61,10 @@ public class Core extends JavaPlugin {
     private void registerCommands() {
         Arrays.asList(new StaffChatCommand(),
                 new CoreReloadCommand(),
-                new ServerMonitorCommand())
+                new ServerMonitorCommand(),
+                new MessageCommand(),
+                new ReplyCommand(),
+                new PrivateMessageCommand())
                 .forEach(commands -> registerCommand(commands, getName()));
     }
 
