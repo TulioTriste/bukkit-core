@@ -1,5 +1,6 @@
 package net.pandamc.core.commands;
 
+import lombok.var;
 import net.pandamc.core.Core;
 import net.pandamc.core.util.CC;
 import net.pandamc.core.util.redis.impl.Payload;
@@ -34,7 +35,7 @@ public class StaffChatCommand extends Command {
             commandSender.sendMessage(CC.translate("&cNo Permissions."));
             return true;
         }
-        Player player = (Player) commandSender;
+        var player = (Player) commandSender;
         if (strings.length == 0) {
             if (INSTANCE.contains(player.getUniqueId())) {
                 INSTANCE.remove(player.getUniqueId());
@@ -45,13 +46,13 @@ public class StaffChatCommand extends Command {
             }
             return true;
         }
-        StringBuilder message = new StringBuilder();
-        for (String string : strings) {
+        var message = new StringBuilder();
+        for (var string : strings) {
             message.append(string).append(" ");
         }
-        String json = new RedisMessage(Payload.STAFF_CHAT)
+        var json = new RedisMessage(Payload.STAFF_CHAT)
                 .setParam("PLAYER", player.getName())
-                .setParam("PREFIX", Core.get().getChat().getPlayerPrefix(player))
+                .setParam("PREFIX", Core.get().getRankManager().getRankPrefix(player))
                 .setParam("SERVER", Core.get().getServerName())
                 .setParam("MESSAGE", message.toString())
                 .toJSON();

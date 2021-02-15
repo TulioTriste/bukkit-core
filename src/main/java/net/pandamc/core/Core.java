@@ -2,12 +2,17 @@ package net.pandamc.core;
 
 import com.lunarclient.bukkitapi.LunarClientAPI;
 import lombok.Getter;
+import lombok.Setter;
 import net.milkbowl.vault.chat.Chat;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.pandamc.core.commands.*;
 import net.pandamc.core.listeners.PlayerListener;
 import net.pandamc.core.listeners.StaffListener;
+import net.pandamc.core.rank.Rank;
+import net.pandamc.core.rank.RankManager;
+import net.pandamc.core.task.VipsOnlineTask;
 import net.pandamc.core.toggle.PrivateMessageCommand;
+import net.pandamc.core.util.TaskUtil;
 import net.pandamc.core.util.file.type.BasicConfigurationFile;
 import net.pandamc.core.util.menu.MenuListener;
 import net.pandamc.core.util.redis.Redis;
@@ -20,12 +25,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 
 @Getter
+@Setter
 public class Core extends JavaPlugin {
 
     private BasicConfigurationFile mainConfig;
     private Redis redisManager;
     private String serverName;
     private Chat chat;
+    private RankManager rankManager;
+    private String rankSystem;
 
     public static Core get() {
         return getPlugin(Core.class);
@@ -37,6 +45,7 @@ public class Core extends JavaPlugin {
         registerManagers();
         registerListeners();
         registerCommands();
+        loadTasks();
         sendInfoLoad();
     }
 
@@ -52,8 +61,8 @@ public class Core extends JavaPlugin {
 
     private void registerManagers() {
         new LunarClientAPI(this);
-        loadVault();
         redisManager = new Redis();
+        Rank.init();
         redisManager.connect();
         this.serverName = getMainConfig().getString("SERVER");
     }
@@ -75,7 +84,11 @@ public class Core extends JavaPlugin {
                 .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
-    private void loadVault() {
+    private void loadTasks() {
+        TaskUtil.runTimer(new VipsOnlineTask(), 2400L, 2400L);
+    }
+
+    public void loadVault() {
         RegisteredServiceProvider<Chat> provider = getServer().getServicesManager().getRegistration(Chat.class);
         if (provider != null) {
             chat = provider.getProvider();

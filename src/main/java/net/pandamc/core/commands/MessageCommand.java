@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.var;
 import net.pandamc.core.Core;
 import net.pandamc.core.toggle.PrivateMessageCommand;
 import net.pandamc.core.util.CC;
@@ -36,7 +37,7 @@ public class MessageCommand extends Command {
 			return true;
 		}
 
-		Player player = (Player) commandSender;
+		var player = (Player) commandSender;
 
 		if (!player.hasPermission("pandahub.message")) {
 			player.sendMessage(CC.translate("&cNo Permissions."));
@@ -48,7 +49,7 @@ public class MessageCommand extends Command {
 			return true;
 		}
 
-		Player target = Bukkit.getPlayer(strings[0]);
+		var target = Bukkit.getPlayer(strings[0]);
 
 		if (target == null) {
 			player.sendMessage(CC.translate("&cPlayer not found."));
@@ -60,21 +61,19 @@ public class MessageCommand extends Command {
 			return true;
 		}
 
-		StringBuilder message = new StringBuilder();
+		var message = new StringBuilder();
 
-		for (int i = 1; i != strings.length; i++) {
+		for (var i = 1; i != strings.length; i++) {
 			message.append(strings[i]).append(" ");
 		}
 
-		String playerName = Core.get().getRankManager().getRankPrefix(player) + player.getName();
-		String targetName = Core.get().getRankManager().getRankPrefix(target) + target.getName();
+		var playerName = Core.get().getRankManager().getRankPrefix(player) + player.getName();
+		var targetName = Core.get().getRankManager().getRankPrefix(target) + target.getName();
 
 		target.playSound(target.getLocation(), Sound.ORB_PICKUP, 1F, 1F);
 
-		player.sendMessage(CC.translate(ColorMessageButton.getColorMessage(player)
-				+ "(To " + targetName + ColorMessageButton.getColorMessage(player) + ") " + message));
-		target.sendMessage(CC.translate(ColorMessageButton.getColorMessage(target)
-				+ "(From " + playerName + ColorMessageButton.getColorMessage(target) + ") " + message));
+		player.sendMessage(CC.translate("&7(To " + targetName + "&7) &r" + message));
+		target.sendMessage(CC.translate( "&7(From " + playerName + "&7) &r" + message));
 
 		lastMessage.put(player, target);
 		lastMessage.put(target, player);

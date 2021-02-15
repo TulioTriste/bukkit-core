@@ -1,26 +1,12 @@
 package net.pandamc.core.commands;
 
-import lombok.AllArgsConstructor;
-import net.pandamc.core.Core;
+import lombok.var;
 import net.pandamc.core.servermonitor.menu.ServerMonitorMenu;
 import net.pandamc.core.util.CC;
-import net.pandamc.core.util.item.ItemBuilder;
-import net.pandamc.core.util.menu.Button;
-import net.pandamc.core.util.menu.Menu;
-import net.pandamc.core.util.redis.impl.Payload;
-import net.pandamc.core.util.redis.util.RedisMessage;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ServerMonitorCommand extends Command {
 
@@ -39,7 +25,7 @@ public class ServerMonitorCommand extends Command {
             commandSender.sendMessage(CC.translate("&cNo Permissions."));
             return true;
         }
-        Player player = (Player) commandSender;
+        var player = (Player) commandSender;
         new ServerMonitorMenu().openMenu(player);
         return false;
     }

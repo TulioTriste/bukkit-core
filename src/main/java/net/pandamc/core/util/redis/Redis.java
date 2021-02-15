@@ -1,6 +1,7 @@
 package net.pandamc.core.util.redis;
 
 import lombok.Getter;
+import lombok.var;
 import net.pandamc.core.Core;
 import net.pandamc.core.util.redis.listener.RedisListener;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
@@ -28,7 +29,7 @@ public class Redis {
         try {
             Core.get().getLogger().info("Connecting to redis");
             this.jedisPool = new JedisPool(ip, port);
-            Jedis jedis = this.jedisPool.getResource();
+            var jedis = this.jedisPool.getResource();
             if (auth)
                 if (password != null || !password.equals(Strings.EMPTY))
                     jedis.auth(this.password);
@@ -49,7 +50,7 @@ public class Redis {
     }
 
     public void write(String json){
-        try (Jedis jedis = this.jedisPool.getResource()) {
+        try (var jedis = this.jedisPool.getResource()) {
             if (auth) {
                 if (password != null || !password.equals(""))
                     jedis.auth(this.password);

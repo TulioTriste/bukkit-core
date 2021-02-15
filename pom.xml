@@ -77,13 +77,6 @@
         </dependency>
 
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.lunarclient</groupId>
             <artifactId>bukkitapi</artifactId>
             <version>1.0-20200729.212152-7</version>
@@ -95,6 +88,52 @@
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>club.frozed.zoom</groupId>
+            <artifactId>ZoomAPI</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/ZoomAPI-1.1-SNAPSHOT.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>me.activated.core</groupId>
+            <artifactId>AquaCoreAPI</artifactId>
+            <version>API</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/AquaCoreAPI.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.broustudio.MizuAPI</groupId>
+            <artifactId>MizuAPI</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/MizuAPI.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>me.quartz.hestia</groupId>
+            <artifactId>HestiaAPI</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/HestiaAPI.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

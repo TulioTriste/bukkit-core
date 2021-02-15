@@ -1,5 +1,6 @@
 package net.pandamc.core.commands;
 
+import lombok.var;
 import net.pandamc.core.Core;
 import net.pandamc.core.util.CC;
 import org.bukkit.command.Command;
@@ -22,35 +23,33 @@ public class ReplyCommand extends Command {
 			return true;
 		}
 
-		Player player = (Player) commandSender;
+		var player = (Player) commandSender;
 
 		if (strings.length < 1) {
-			player.sendMessage(CC.translate("&cUsage: /" + label + " <message>"));
+			player.sendMessage(CC.translate("&cUsage: /" + s + " <message>"));
 			return true;
 		}
 
-		Player target = MessageCommand.getInstance().lastMessage.get(player);
+		var target = MessageCommand.getInstance().lastMessage.get(player);
 
 		if (target == null) {
 			player.sendMessage(CC.translate("&cNothing to reply."));
 			return true;
 		}
 
-		StringBuilder message = new StringBuilder();
+		var message = new StringBuilder();
 
 		for (int i = 0; i != strings.length; i++) {
 			message.append(strings[i]).append(" ");
 		}
 
-		String playerName = Core.get().getRankManager().getRankPrefix(player) + player.getName();
-		String targetName = Core.get().getRankManager().getRankPrefix(target) + target.getName();
+		var playerName = Core.get().getRankManager().getRankPrefix(player) + player.getName();
+		var targetName = Core.get().getRankManager().getRankPrefix(target) + target.getName();
 
 		target.playSound(target.getLocation(), org.bukkit.Sound.ORB_PICKUP, 1F, 1F);
 
-		player.sendMessage(CC.translate(ColorMessageButton.getColorMessage(player)
-				+ "(To " + targetName + ColorMessageButton.getColorMessage(player) + ") " + message));
-		target.sendMessage(CC.translate(ColorMessageButton.getColorMessage(target)
-				+ "(From " + playerName + ColorMessageButton.getColorMessage(target) + ") " + message));
+		player.sendMessage(CC.translate("&7(To " + targetName + "&7) &r" + message));
+		target.sendMessage(CC.translate("&7(From " + playerName + "&7) &r" + message));
 
 		MessageCommand.getInstance().lastMessage.put(player, target);
 		MessageCommand.getInstance().lastMessage.put(target, player);

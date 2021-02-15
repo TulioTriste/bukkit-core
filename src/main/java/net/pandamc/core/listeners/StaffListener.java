@@ -20,7 +20,7 @@ public class StaffListener implements Listener {
         if (player.hasPermission("bukkit.core.staff")) {
             String json = new RedisMessage(Payload.STAFF_JOIN)
                     .setParam("PLAYER", player.getName())
-                    .setParam("PREFIX", plugin.getChat().getPlayerPrefix(player))
+                    .setParam("PREFIX", plugin.getRankManager().getRankPrefix(player))
                     .setParam("SERVER", plugin.getServerName())
                     .toJSON();
 
@@ -35,7 +35,7 @@ public class StaffListener implements Listener {
             event.setCancelled(true);
             String json = new RedisMessage(Payload.STAFF_CHAT)
                     .setParam("PLAYER", player.getName())
-                    .setParam("PREFIX", plugin.getChat().getPlayerPrefix(player))
+                    .setParam("PREFIX", plugin.getRankManager().getRankPrefix(player))
                     .setParam("SERVER", plugin.getServerName())
                     .setParam("MESSAGE", event.getMessage())
                     .toJSON();
