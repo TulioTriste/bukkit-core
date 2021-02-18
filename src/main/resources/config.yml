@@ -5,3 +5,4 @@ REDIS:
     ENABLED: false
     PASSWORD: ''
 SERVER: "hub"
+MESSAGE-REPLY-BOOLEAN: false

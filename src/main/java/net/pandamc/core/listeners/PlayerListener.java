@@ -56,13 +56,15 @@ public class PlayerListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         var message = event.getMessage();
 
-        blacklist.forEach(words -> {
-            for (var s : message.split(" ")) {
-                if (s.toLowerCase().equals(words) || s.toLowerCase().startsWith(words) || s.toLowerCase().endsWith(words)) {
-                    event.setMessage(replacer.get(ThreadLocalRandom.current().nextInt(replacer.size())));
+        if (event.getPlayer().hasPermission("bukkit.core.staff")) {
+            blacklist.forEach(words -> {
+                for (var s : message.split(" ")) {
+                    if (s.toLowerCase().equals(words) || s.toLowerCase().startsWith(words) || s.toLowerCase().endsWith(words)) {
+                        event.setMessage(replacer.get(ThreadLocalRandom.current().nextInt(replacer.size())));
+                    }
                 }
-            }
-        });
+            });
+        }
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (event.getMessage().contains(player.getName()) && player.hasPermission("bukkit.core.staff")) {

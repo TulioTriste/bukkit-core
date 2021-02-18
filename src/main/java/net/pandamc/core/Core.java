@@ -68,12 +68,15 @@ public class Core extends JavaPlugin {
     }
 
     private void registerCommands() {
+        if (mainConfig.getBoolean("MESSAGE-REPLY-BOOLEAN")) {
+            Arrays.asList(new MessageCommand(),
+                    new ReplyCommand(),
+                    new PrivateMessageCommand())
+                    .forEach(command -> registerCommand(command, getName()));
+        }
         Arrays.asList(new StaffChatCommand(),
                 new CoreReloadCommand(),
-                new ServerMonitorCommand(),
-                new MessageCommand(),
-                new ReplyCommand(),
-                new PrivateMessageCommand())
+                new ServerMonitorCommand())
                 .forEach(commands -> registerCommand(commands, getName()));
     }
 

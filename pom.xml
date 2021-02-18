@@ -91,6 +91,22 @@
         </dependency>
 
         <dependency>
+            <groupId>us.myles.ViaVersion</groupId>
+            <artifactId>ViaVersion</artifactId>
+            <version>3.2.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/ViaVersion-3.2.1.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>protocolsupport</groupId>
+            <artifactId>ProtocolSupport</artifactId>
+            <version>4.6</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/protocolsupport-SNAPSHOT.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
