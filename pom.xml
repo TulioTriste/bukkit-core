@@ -58,6 +58,10 @@
             <id>lunarclient-public</id>
             <url>https://maven.moonsworth.com/repository/lunarclient-public/</url>
         </repository>
+        <repository>
+            <id>public</id>
+            <url>http://haoshoku.xyz:8081/repository/public</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -150,6 +154,20 @@
             <artifactId>HikariCP</artifactId>
             <version>4.0.1</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>xyz.haoshoku.nick</groupId>
+            <artifactId>nickapi</artifactId>
+            <version>6.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

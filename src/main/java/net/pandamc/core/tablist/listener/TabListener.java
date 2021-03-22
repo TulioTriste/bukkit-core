@@ -1,8 +1,11 @@
 package net.pandamc.core.tablist.listener;
 
 import lombok.AllArgsConstructor;
+import net.pandamc.core.events.DisguiseUpdateEvent;
 import net.pandamc.core.tablist.Tablist;
+import net.pandamc.core.tablist.entry.TabEntry;
 import net.pandamc.core.tablist.layout.TabLayout;
+import net.pandamc.core.tablist.skin.Skin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

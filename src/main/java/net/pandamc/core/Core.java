@@ -6,8 +6,15 @@ import lombok.Setter;
 import net.milkbowl.vault.chat.Chat;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.pandamc.core.commands.*;
+import net.pandamc.core.database.impl.MongoHandler;
+import net.pandamc.core.disguise.DisguiseAction;
+import net.pandamc.core.disguise.DisguiseManager;
+import net.pandamc.core.disguise.nms.DisguiseImplementation;
+import net.pandamc.core.listeners.DisguiseListener;
 import net.pandamc.core.listeners.PlayerListener;
+import net.pandamc.core.listeners.ServerListener;
 import net.pandamc.core.listeners.StaffListener;
+import net.pandamc.core.profile.ProfileListener;
 import net.pandamc.core.rank.Rank;
 import net.pandamc.core.rank.RankManager;
 import net.pandamc.core.task.VipsOnlineTask;
@@ -18,22 +25,27 @@ import net.pandamc.core.util.menu.MenuListener;
 import net.pandamc.core.util.redis.Redis;
 import net.pandamc.core.util.redis.impl.Payload;
 import net.pandamc.core.util.redis.util.RedisMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 public class Core extends JavaPlugin {
 
-    private BasicConfigurationFile mainConfig;
+    private BasicConfigurationFile mainConfig, coloredRanksConfig, disguiseConfig;
     private Redis redisManager;
-    private String serverName;
+    private String serverName, rankSystem;
     private Chat chat;
     private RankManager rankManager;
-    private String rankSystem;
+    private DisguiseImplementation disguiseImplementation;
+    private DisguiseManager disguiseManager;
+    private MongoHandler mongoManager;
+    @Setter private List<DisguiseAction> disguiseActions = new ArrayList<>();
 
     public static Core get() {
         return getPlugin(Core.class);
@@ -52,19 +64,28 @@ public class Core extends JavaPlugin {
     @Override
     public void onDisable() {
         sendInfoClosed();
-        redisManager.disconnect();
+        this.redisManager.disconnect();
+//        this.mongoManager.getMongoClient().close();
     }
 
     private void registerConfigs() {
         this.mainConfig = new BasicConfigurationFile(this, "config");
+        this.coloredRanksConfig = new BasicConfigurationFile(this, "colored-ranks");
+        this.disguiseConfig = new BasicConfigurationFile(this, "disguise");
     }
 
     private void registerManagers() {
         new LunarClientAPI(this);
-        redisManager = new Redis();
+        this.redisManager = new Redis();
         Rank.init();
-        redisManager.connect();
+        this.redisManager.connect();
         this.serverName = getMainConfig().getString("SERVER");
+//        this.handlerNMS();
+//        this.mongoManager = new MongoHandler();
+//        this.mongoManager.connect();
+//
+//        this.disguiseManager = new DisguiseManager();
+//        TaskUtil.runLaterAsync(disguiseManager::load, 20);
     }
 
     private void registerCommands() {
@@ -76,14 +97,16 @@ public class Core extends JavaPlugin {
         }
         Arrays.asList(new StaffChatCommand(),
                 new CoreReloadCommand(),
-                new ServerMonitorCommand())
+                new ServerMonitorCommand(),
+                new ListCommand())
                 .forEach(commands -> registerCommand(commands, getName()));
     }
 
     private void registerListeners() {
         Arrays.asList(new StaffListener(),
                 new PlayerListener(),
-                new MenuListener())
+                new MenuListener(),
+                new ServerListener())
                 .forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
@@ -115,4 +138,19 @@ public class Core extends JavaPlugin {
     private void registerCommand(Command cmd, String fallbackPrefix) {
         MinecraftServer.getServer().server.getCommandMap().register(cmd.getName(), fallbackPrefix, cmd);
     }
+
+//    private void handlerNMS() {
+//        String packageName = this.getServer().getClass().getPackage().getName();
+//        String version = packageName.substring(packageName.lastIndexOf('.') + 1);
+//        try {
+//            final Class<?> clazz = Class.forName("net.pandamc.core.disguise.nms.impl." + version);
+//            if (DisguiseImplementation.class.isAssignableFrom(clazz)) {
+//                disguiseImplementation = (DisguiseImplementation) clazz.getConstructor().newInstance();
+//            }
+//            getLogger().info("Using -> " + version + " NMS");
+//        } catch (final Exception e) {
+//            getLogger().info("&4ERROR &c-> Could not find support for this version. Running version: " + version);
+//            Bukkit.getPluginManager().disablePlugin(this);
+//        }
+//    }
 }

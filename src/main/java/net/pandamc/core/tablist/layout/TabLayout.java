@@ -208,9 +208,9 @@ public class TabLayout {
 		for(int row = 0; row < 20; row++) {
 			for(int column = 0; column < 3; column++) {
 				int index = row + column * 20;
-				Skin defualtSkin = Skin.DEFAULT_SKIN;
+				Skin defaultSkin = Skin.DEFAULT_SKIN;
 				//TODO: default skin bars
-				skinMapping.put(index, defualtSkin);
+				skinMapping.put(index, defaultSkin);
 
 				Property property = skinMapping.get(index).getProperty();
 

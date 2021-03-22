@@ -21,6 +21,10 @@ public class TaskUtil {
         Core.get().getServer().getScheduler().runTaskLater(Core.get(), runnable, delay);
     }
 
+    public static void runLaterAsync(Runnable runnable, long delay) {
+        Core.get().getServer().getScheduler().runTaskLaterAsynchronously(Core.get(), runnable, delay);
+    }
+
     public static void runAsync(Runnable runnable) {
         Core.get().getServer().getScheduler().runTaskAsynchronously(Core.get(), runnable);
     }
