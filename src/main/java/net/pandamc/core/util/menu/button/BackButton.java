@@ -1,8 +1,8 @@
 package net.pandamc.core.util.menu.button;
 
+import net.pandamc.core.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import net.pandamc.core.util.CC;
-import net.pandamc.core.util.item.ItemBuilder;
 import net.pandamc.core.util.menu.Button;
 import net.pandamc.core.util.menu.Menu;
 import org.bukkit.Material;

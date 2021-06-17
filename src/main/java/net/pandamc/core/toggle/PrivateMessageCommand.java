@@ -1,9 +1,11 @@
 package net.pandamc.core.toggle;
 
 import com.google.common.collect.Sets;
+import net.pandamc.core.util.command.BaseCommand;
+import net.pandamc.core.util.command.Command;
+import net.pandamc.core.util.command.CommandArgs;
 import lombok.Getter;
 import net.pandamc.core.util.CC;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,41 +15,27 @@ import java.util.Set;
 import java.util.UUID;
 
 @Getter
-public class PrivateMessageCommand extends Command {
+public class PrivateMessageCommand extends BaseCommand {
 
-	@Getter
-	private static PrivateMessageCommand instance;
-	private final Set<UUID> privateMessage = Sets.newHashSet();
+	@Getter public static final Set<UUID> privateMessage = Sets.newHashSet();
 
-	public PrivateMessageCommand() {
-		super("toggleprivatemessage");
-		this.setAliases(Arrays.asList("togglepm", "togglemsg"));
-		this.setPermission("bukkit.core.toggleprivatemessage");
-		instance = this;
-	}
-
+	@Command(name = "toggleprivatemessage", aliases = {"togglepm", "togglemsg"}, permission = "bukkit.core.toggleprivatemessage")
 	@Override
-	public boolean execute(CommandSender commandSender, String s, String[] strings) {
-		if (!(commandSender instanceof Player)) {
-			commandSender.sendMessage(CC.translate("&cNo Console."));
-			return true;
-		}
+	public void onCommand(CommandArgs commandArgs) {
+		Player player = commandArgs.getPlayer();
 
-		Player player = (Player) commandSender;
-
-		if (!player.hasPermission(getPermission())) {
+		if (!player.hasPermission("bukkit.core.toggleprivatemessage")) {
 			player.sendMessage(CC.translate("&cNo Permissions."));
-			return true;
+			return;
 		}
 
-		if (this.privateMessage.contains(player.getUniqueId())) {
-			this.privateMessage.remove(player.getUniqueId());
+		if (getPrivateMessage().contains(player.getUniqueId())) {
+			getPrivateMessage().remove(player.getUniqueId());
 //			player.sendMessage(CC.set(MessageFile.getConfig().getString("PRIVATE-MESSAGE.ENABLE")));
 		}
 		else {
-			this.privateMessage.add(player.getUniqueId());
+			getPrivateMessage().add(player.getUniqueId());
 //			player.sendMessage(CC.set(MessageFile.getConfig().getString("PRIVATE-MESSAGE.DISABLE")));
 		}
-		return true;
 	}
 }

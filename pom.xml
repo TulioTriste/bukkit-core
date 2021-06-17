@@ -56,7 +56,7 @@
         </repository>
         <repository>
             <id>lunarclient-public</id>
-            <url>https://maven.moonsworth.com/repository/lunarclient-public/</url>
+            <url>https://maven.moonsworth.com/repository/lunarclient-public</url>
         </repository>
         <repository>
             <id>public</id>
@@ -66,11 +66,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>club.gexin.gxspigot</groupId>
-            <artifactId>gxspigot-parent</artifactId>
-            <version>dev-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-1.8</artifactId>
+            <version>1.8.8</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/gxspigot-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}/libs/spigot-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -82,16 +82,16 @@
 
         <dependency>
             <groupId>com.lunarclient</groupId>
-            <artifactId>bukkitapi</artifactId>
-            <version>1.0-20200729.212152-7</version>
-            <scope>compile</scope>
+            <artifactId>bukkitapi-nethandler</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -154,13 +154,6 @@
             <artifactId>HikariCP</artifactId>
             <version>4.0.1</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>xyz.haoshoku.nick</groupId>
-            <artifactId>nickapi</artifactId>
-            <version>6.1-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

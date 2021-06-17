@@ -1,58 +1,53 @@
 package net.pandamc.core.commands;
 
+import net.pandamc.core.util.command.BaseCommand;
+import net.pandamc.core.util.command.Command;
+import net.pandamc.core.util.command.CommandArgs;
 import lombok.var;
 import net.pandamc.core.Core;
 import net.pandamc.core.util.CC;
-import org.bukkit.command.Command;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-public class ReplyCommand extends Command {
-	
-	public ReplyCommand() {
-		super("reply");
-		this.setAliases(Arrays.asList("r"));
-	}
+public class ReplyCommand extends BaseCommand {
 
+	@Command(name = "reply", aliases = "r")
 	@Override
-	public boolean execute(CommandSender commandSender, String s, String[] strings) {
-		if (!(commandSender instanceof Player)) {
-			commandSender.sendMessage(CC.translate("&cNo Console."));
-			return true;
+	public void onCommand(CommandArgs commandArgs) {
+		Player player = commandArgs.getPlayer();
+		String label = commandArgs.getLabel();
+		String[] args = commandArgs.getArgs();
+
+		if (args.length < 1) {
+			player.sendMessage(CC.translate("&cUsage: /" + label + " <message>"));
+			return;
 		}
 
-		var player = (Player) commandSender;
-
-		if (strings.length < 1) {
-			player.sendMessage(CC.translate("&cUsage: /" + s + " <message>"));
-			return true;
-		}
-
-		var target = MessageCommand.getInstance().lastMessage.get(player);
+		Player target = MessageCommand.getInstance().lastMessage.get(player);
 
 		if (target == null) {
 			player.sendMessage(CC.translate("&cNothing to reply."));
-			return true;
+			return;
 		}
 
-		var message = new StringBuilder();
+		StringBuilder message = new StringBuilder();
 
-		for (int i = 0; i != strings.length; i++) {
-			message.append(strings[i]).append(" ");
+		for (int i = 0; i != args.length; i++) {
+			message.append(args[i]).append(" ");
 		}
 
 		var playerName = Core.get().getRankManager().getRankPrefix(player) + player.getName();
 		var targetName = Core.get().getRankManager().getRankPrefix(target) + target.getName();
 
-		target.playSound(target.getLocation(), org.bukkit.Sound.ORB_PICKUP, 1F, 1F);
+		target.playSound(target.getLocation(), Sound.ORB_PICKUP, 1F, 1F);
 
 		player.sendMessage(CC.translate("&7(To " + targetName + "&7) &r" + message));
 		target.sendMessage(CC.translate("&7(From " + playerName + "&7) &r" + message));
 
 		MessageCommand.getInstance().lastMessage.put(player, target);
 		MessageCommand.getInstance().lastMessage.put(target, player);
-		return true;
 	}
 }

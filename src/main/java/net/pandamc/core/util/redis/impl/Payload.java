@@ -5,6 +5,7 @@ public enum Payload {
     DISABLE_SERVER,
     STAFF_JOIN,
     STAFF_CHAT,
+    ADMIN_CHAT,
     CLOSE_SERVER,
     ENABLE_WHITELIST,
     DISABLE_WHITELIST

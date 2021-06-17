@@ -1,42 +1,36 @@
 package net.pandamc.core.commands;
 
+import com.google.common.collect.Sets;
+import net.pandamc.core.util.command.BaseCommand;
+import net.pandamc.core.util.command.Command;
+import net.pandamc.core.util.command.CommandArgs;
 import lombok.var;
 import net.pandamc.core.Core;
 import net.pandamc.core.util.CC;
 import net.pandamc.core.util.redis.impl.Payload;
 import net.pandamc.core.util.redis.util.RedisMessage;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class StaffChatCommand extends Command {
+public class StaffChatCommand extends BaseCommand {
 
-    public static Set<UUID> INSTANCE;
+    public static Set<UUID> INSTANCE = Sets.newHashSet();
 
-    static {
-        INSTANCE = new HashSet<>();
-    }
-
-    public StaffChatCommand() {
-        super("staffchat", "StaffChat command", null, Arrays.asList("sc", "schat", "staffc"));
-        this.setPermission("bukkit.core.staff");
-    }
-
+    @Command(name = "staffchat", aliases = {"sc", "schat", "staffc"}, permission = "bukkit.core.staff")
     @Override
-    public boolean execute(CommandSender commandSender, String s, String[] strings) {
-        if (commandSender instanceof ConsoleCommandSender) {
-            commandSender.sendMessage(CC.translate("&cNo Console."));
-            return true;
+    public void onCommand(CommandArgs commandArgs) {
+        Player player = commandArgs.getPlayer();
+        String label = commandArgs.getLabel();
+        String[] args = commandArgs.getArgs();
+
+        if (!player.hasPermission("bukkit.core.staff")) {
+            player.sendMessage(CC.translate("&cNo Permissions."));
+            return;
         }
-        else if (!commandSender.hasPermission(getPermission())) {
-            commandSender.sendMessage(CC.translate("&cNo Permissions."));
-            return true;
-        }
-        var player = (Player) commandSender;
-        if (strings.length == 0) {
+        if (args.length == 0) {
             if (INSTANCE.contains(player.getUniqueId())) {
                 INSTANCE.remove(player.getUniqueId());
                 player.sendMessage(CC.translate("&9[Staff] &bStaffChat &cDisabled"));
@@ -44,10 +38,10 @@ public class StaffChatCommand extends Command {
                 INSTANCE.add(player.getUniqueId());
                 player.sendMessage(CC.translate("&9[Staff] &bStaffChat &aEnabled"));
             }
-            return true;
+            return;
         }
         var message = new StringBuilder();
-        for (var string : strings) {
+        for (var string : args) {
             message.append(string).append(" ");
         }
         var json = new RedisMessage(Payload.STAFF_CHAT)
@@ -57,6 +51,5 @@ public class StaffChatCommand extends Command {
                 .setParam("MESSAGE", message.toString())
                 .toJSON();
         Core.get().getRedisManager().write(json);
-        return false;
     }
 }

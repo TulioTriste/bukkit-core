@@ -1,32 +1,22 @@
 package net.pandamc.core.commands;
 
-import lombok.var;
+import net.pandamc.core.util.command.BaseCommand;
+import net.pandamc.core.util.command.Command;
+import net.pandamc.core.util.command.CommandArgs;
 import net.pandamc.core.servermonitor.menu.ServerMonitorMenu;
 import net.pandamc.core.util.CC;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class ServerMonitorCommand extends Command {
+public class ServerMonitorCommand extends BaseCommand {
 
-    public ServerMonitorCommand() {
-        super("servermonitor");
-        this.setPermission("bukkit.core.servermonitor");
-    }
-
+    @Command(name = "servermonitor", permission = "bukkit.core.servermonitor")
     @Override
-    public boolean execute(CommandSender commandSender, String s, String[] strings) {
-        if (commandSender instanceof ConsoleCommandSender) {
-            commandSender.sendMessage(CC.translate("&cNo Console."));
-            return true;
+    public void onCommand(CommandArgs commandArgs) {
+        Player player = commandArgs.getPlayer();
+        if (!player.hasPermission("bukkit.core.servermonitor")) {
+            player.sendMessage(CC.translate("&cNo Permissions."));
+            return;
         }
-        if (!commandSender.hasPermission(getPermission())) {
-            commandSender.sendMessage(CC.translate("&cNo Permissions."));
-            return true;
-        }
-        var player = (Player) commandSender;
         new ServerMonitorMenu().openMenu(player);
-        return false;
     }
 }

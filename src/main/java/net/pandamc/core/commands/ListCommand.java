@@ -1,12 +1,14 @@
 package net.pandamc.core.commands;
 
+import net.pandamc.core.util.command.BaseCommand;
+import net.pandamc.core.util.command.Command;
+import net.pandamc.core.util.command.CommandArgs;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.model.user.UserManager;
 import net.pandamc.core.Core;
 import net.pandamc.core.util.CC;
 import net.pandamc.core.util.TaskUtil;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -14,18 +16,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListCommand extends Command {
+public class ListCommand extends BaseCommand {
 
     private final Core plugin = Core.get();
 
-    public ListCommand() {
-        super("list");
-    }
-
+    @Command(name = "list", inGameOnly = false)
     @Override
-    public boolean execute(CommandSender commandSender, String s, String[] strings) {
+    public void onCommand(CommandArgs commandArgs) {
+        CommandSender sender = commandArgs.getSender();
         TaskUtil.runAsync(() -> {
-            commandSender.sendMessage(CC.translate("&7" + plugin.getServer().getOnlinePlayers().size() +
+            sender.sendMessage(CC.translate("&7" + plugin.getServer().getOnlinePlayers().size() +
                     " Players out of " + plugin.getServer().getMaxPlayers() + " Connected"));
             List<Player> playerList = plugin.getServer().getOnlinePlayers().stream()
                     .sorted(new ComparatorPlayersWeight().reversed())
@@ -38,9 +38,8 @@ public class ListCommand extends Command {
                         .append(players.getName())
                         .append(CC.translate("&7, "));
             });
-            commandSender.sendMessage(message.substring(0, message.length() - 2));
+            sender.sendMessage(message.substring(0, message.length() - 2));
         });
-        return false;
     }
 
     private static class ComparatorPlayersWeight implements Comparator<Player> {

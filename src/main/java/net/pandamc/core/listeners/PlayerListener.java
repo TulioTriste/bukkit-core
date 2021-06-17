@@ -1,13 +1,7 @@
 package net.pandamc.core.listeners;
 
-import com.lunarclient.bukkitapi.LunarClientAPI;
-import com.lunarclient.bukkitapi.object.LCNotification;
 import lombok.var;
 import net.pandamc.core.Core;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,17 +10,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerListener implements Listener {
 
     private final Core plugin = Core.get();
-    private final List<String> blacklist = Arrays.asList("galanthus", "galanthusmc", "ghostly", "ghostlymc", "ghostlylive",
-            "skillwars", "skillwarsmc", "skillwarsnet", "holy", "holymc", "holynet", "koru", "korurip", "korumc", "hazel",
+    private final List<String> blacklist = Arrays.asList("ghostly", "ghostlymc", "ghostlylive", "skillwars", "skillwarsmc",
+            "skillwarsnet", "holy", "holymc", "holynet", "koru", "korurip", "korumc", "hazel",
             "hazelmc", "safe", "safemc", "safeclub", "sunpvp", "astral", "astralmc", "silex", "silexpvp", "silexmc",
             "kora", "korapvp", "koramc", "sololegends", "dynamicmc", "dynamicpvp", "water", "watermc", "waterpvp",
             "veax", "veaxmc", "veaxpvp", "veaxus", "veaxrip",
@@ -66,11 +58,11 @@ public class PlayerListener implements Listener {
             });
         }
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            if (event.getMessage().contains(player.getName()) && player.hasPermission("bukkit.core.staff")) {
-                LunarClientAPI.getInstance().sendNotification(player, new LCNotification(ChatColor.GREEN + "They mentioned you", Duration.ofSeconds(2)));
-                player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
-            }
-        });
+//        Bukkit.getOnlinePlayers().forEach(player -> {
+//            if (event.getMessage().contains(player.getName()) && player.hasPermission("bukkit.core.staff")) {
+//                LunarClientAPI.sendPacket(player, new LCNotification(ChatColor.GREEN + "They mentioned you", Duration.ofSeconds(2)));
+//                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+//            }
+//        });
     }
 }

@@ -1,6 +1,5 @@
 package net.pandamc.core.servermonitor.menu;
 
-import net.pandamc.core.commands.ServerMonitorCommand;
 import net.pandamc.core.servermonitor.button.ServerMonitorButton;
 import net.pandamc.core.util.menu.Button;
 import net.pandamc.core.util.menu.Menu;
@@ -27,8 +26,8 @@ public class ServerMonitorMenu extends Menu {
         buttons.put(getSlot(1, 1), new ServerMonitorButton("hub"));
         buttons.put(getSlot(2, 1), new ServerMonitorButton("practice"));
         buttons.put(getSlot(3, 1), new ServerMonitorButton("kitmap"));
-        buttons.put(getSlot(4, 1), new ServerMonitorButton("builds"));
-        buttons.put(getSlot(5, 1), new ServerMonitorButton("dev-1"));
+        buttons.put(getSlot(4, 1), new ServerMonitorButton("squads"));
+        buttons.put(getSlot(5, 1), new ServerMonitorButton("combo"));
         return buttons;
     }
 }

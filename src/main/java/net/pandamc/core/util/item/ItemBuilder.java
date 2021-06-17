@@ -1,154 +1,200 @@
 package net.pandamc.core.util.item;
 
-import org.bukkit.ChatColor;
+import net.pandamc.core.util.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemFlag;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 
-public class ItemBuilder implements Listener {
+public class ItemBuilder {
 
-	private final ItemStack is;
+    private final ItemStack itemStack;
 
-	public ItemBuilder(Material mat) {
-		is = new ItemStack(mat);
-	}
+    public ItemBuilder(Material material) {
+        this.itemStack = new ItemStack(material, 1);
+    }
 
-	public ItemBuilder(ItemStack is) {
-		this.is = is;
-	}
+    public ItemBuilder(String material) {
+        this.itemStack = new ItemStack(Material.valueOf(material), 1);
+    }
 
-	public ItemBuilder amount(int amount) {
-		is.setAmount(amount);
-		return this;
-	}
+    public ItemBuilder(int material) {
+        this.itemStack = new ItemStack(material, 1);
+    }
 
-	public ItemBuilder color(Color color) {
-		if (is.getType() == Material.LEATHER_BOOTS || is.getType() == Material.LEATHER_CHESTPLATE || is.getType() == Material.LEATHER_HELMET
-			|| is.getType() == Material.LEATHER_LEGGINGS) {
-			LeatherArmorMeta meta = (LeatherArmorMeta) is.getItemMeta();
-			meta.setColor(color);
-			is.setItemMeta(meta);
-			return this;
-		} else {
-			throw new IllegalArgumentException("color() only applicable for leather armor!");
-		}
-	}
+    public ItemBuilder(ItemStack itemStack) {
+        this.itemStack = itemStack.clone();
+    }
 
-	public ItemBuilder name(String name) {
-		ItemMeta meta = is.getItemMeta();
-		meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-		is.setItemMeta(meta);
-		return this;
-	}
+    public ItemBuilder(Material material, int damage) {
+        this.itemStack = new ItemStack(material, 1, (short) damage);
+    }
 
-	public ItemBuilder lore(String name) {
-		ItemMeta meta = is.getItemMeta();
-		List<String> lore = meta.getLore();
+    public ItemBuilder(Material material, int amount, int damage) {
+        this.itemStack = new ItemStack(material, amount, (short) damage);
+    }
 
-		if (lore == null) {
-			lore = new ArrayList<>();
-		}
+    public ItemBuilder name(String name) {
+        if (name != null) {
+            name = CC.translate(name);
+            ItemMeta meta = this.itemStack.getItemMeta();
+            meta.setDisplayName(name);
+            this.itemStack.setItemMeta(meta);
+        }
+        return this;
+    }
 
-		lore.add(ChatColor.translateAlternateColorCodes('&', name));
-		meta.setLore(lore);
+    public ItemBuilder lore(List<String> lore) {
+        if (lore != null) {
+            ItemMeta meta = this.itemStack.getItemMeta();
+            meta.setLore(CC.translate(lore));
+            this.itemStack.setItemMeta(meta);
+        }
+        return this;
+    }
 
-		is.setItemMeta(meta);
+    public ItemBuilder lore(String... lore) {
+        if (lore != null) {
+            ItemMeta meta = this.itemStack.getItemMeta();
+            meta.setLore(CC.translate(Arrays.asList(lore)));
+            this.itemStack.setItemMeta(meta);
+        }
+        return this;
+    }
 
-		return this;
-	}
+    public ItemBuilder amount(int amount) {
+        this.itemStack.setAmount(amount);
+        return this;
+    }
 
-	public ItemBuilder lore(String... lore) {
-		List<String> toSet = new ArrayList<>();
-		ItemMeta meta = is.getItemMeta();
+    public ItemBuilder enchant(boolean enchanted) {
+        if (enchanted) {
+            ItemMeta meta = this.itemStack.getItemMeta();
+            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+            this.itemStack.setItemMeta(meta);
+        }
+        return this;
+    }
 
-		for (String string : lore) {
-			toSet.add(ChatColor.translateAlternateColorCodes('&', string));
-		}
+    public ItemBuilder enchant(boolean enchanted, int level) {
+        if (enchanted) {
+            ItemMeta meta = this.itemStack.getItemMeta();
+            meta.addEnchant(Enchantment.DURABILITY, level, true);
+            this.itemStack.setItemMeta(meta);
+        }
+        return this;
+    }
 
-		meta.setLore(toSet);
-		is.setItemMeta(meta);
+    public ItemBuilder enchant(boolean enchanted, Enchantment enchant, int level) {
+        if (enchanted) {
+            ItemMeta meta = this.itemStack.getItemMeta();
+            meta.addEnchant(enchant, level, true);
+            this.itemStack.setItemMeta(meta);
+        }
+        return this;
+    }
 
-		return this;
-	}
+    public ItemBuilder data(int dur) {
+        this.itemStack.setDurability((short) dur);
+        return this;
+    }
 
-	public ItemBuilder lore(List<String> lore) {
-		List<String> toSet = new ArrayList<>();
-		ItemMeta meta = is.getItemMeta();
+    public ItemBuilder owner(String owner) {
+        if (this.itemStack.getType() == Material.SKULL_ITEM) {
+            SkullMeta meta = (SkullMeta) this.itemStack.getItemMeta();
+            meta.setOwner(owner);
+            this.itemStack.setItemMeta(meta);
+            return this;
+        }
 
-		for (String string : lore) {
-			toSet.add(ChatColor.translateAlternateColorCodes('&', string));
-		}
+        throw new IllegalArgumentException("setOwner() only applicable for Skull Item");
+    }
 
-		meta.setLore(toSet);
-		is.setItemMeta(meta);
+    public ItemBuilder armorColor(Color color) {
+        try {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) this.itemStack.getItemMeta();
+            leatherArmorMeta.setColor(color);
+            this.itemStack.setItemMeta(leatherArmorMeta);
+        }
+        catch (Exception exception) {
+            Bukkit.getConsoleSender().sendMessage("Error set armor color.");
+        }
+        return this;
+    }
 
-		return this;
-	}
+    public ItemBuilder glow(boolean glow) {
+        if (glow) {
+            ItemMeta meta = this.itemStack.getItemMeta();
 
-	public ItemBuilder durability(int durability) {
-		is.setDurability((short) durability);
-		return this;
-	}
+            meta.addEnchant(new Glow(), 1, true);
+            this.itemStack.setItemMeta(meta);
+        }
+        return this;
+    }
 
-	public ItemBuilder enchantment(Enchantment enchantment, int level) {
-		is.addUnsafeEnchantment(enchantment, level);
-		return this;
-	}
+    public static void registerGlow() {
+        try {
+            Field f = Enchantment.class.getDeclaredField("acceptingNew");
+            f.setAccessible(true);
+            f.set(null, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            Glow glow = new Glow();
+            Enchantment.registerEnchantment(glow);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	public ItemBuilder enchantment(Enchantment enchantment) {
-		is.addUnsafeEnchantment(enchantment, 1);
-		return this;
-	}
+    private static class Glow extends Enchantment {
 
-	public ItemBuilder type(Material material) {
-		is.setType(material);
-		return this;
-	}
+        public Glow() {
+            super(25);
+        }
 
-	public ItemBuilder clearLore() {
-		ItemMeta meta = is.getItemMeta();
+        @Override
+        public boolean canEnchantItem(ItemStack arg0) {
+            return false;
+        }
 
-		meta.setLore(new ArrayList<>());
-		is.setItemMeta(meta);
+        @Override
+        public boolean conflictsWith(Enchantment arg0) {
+            return false;
+        }
 
-		return this;
-	}
+        @Override
+        public EnchantmentTarget getItemTarget() {
+            return null;
+        }
 
-	public ItemBuilder clearEnchantments() {
-		for (Enchantment e : is.getEnchantments().keySet()) {
-			is.removeEnchantment(e);
-		}
+        @Override
+        public int getMaxLevel() {
+            return 2;
+        }
 
-		return this;
-	}
+        @Override
+        public String getName() {
+            return null;
+        }
 
-	public ItemBuilder addItemFlag(ItemFlag itemFlag){
-		ItemMeta meta = is.getItemMeta();
-		meta.addItemFlags(itemFlag);
-		is.setItemMeta(meta);
+        @Override
+        public int getStartLevel() {
+            return 1;
+        }
+    }
 
-		return this;
-	}
-
-	public ItemBuilder addItemFlags(ItemFlag... itemFlag){
-		ItemMeta meta = is.getItemMeta();
-		meta.addItemFlags(itemFlag);
-		is.setItemMeta(meta);
-
-		return this;
-	}
-
-	public ItemStack build() {
-		addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
-		return is;
-	}
-
+    public ItemStack build() {
+        return this.itemStack;
+    }
 }

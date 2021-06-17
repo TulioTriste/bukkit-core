@@ -1,8 +1,8 @@
 package net.pandamc.core.util.menu.pagination;
 
+import net.pandamc.core.util.item.ItemBuilder;
 import lombok.AllArgsConstructor;
 import net.pandamc.core.util.CC;
-import net.pandamc.core.util.item.ItemBuilder;
 import net.pandamc.core.util.menu.Button;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;

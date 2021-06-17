@@ -1,13 +1,9 @@
 package net.pandamc.core.servermonitor.button;
 
-import lombok.AllArgsConstructor;
-import net.pandamc.core.Core;
-import net.pandamc.core.servermonitor.menu.ServerConfigurationMenu;
-import net.pandamc.core.util.CC;
 import net.pandamc.core.util.item.ItemBuilder;
+import lombok.AllArgsConstructor;
+import net.pandamc.core.servermonitor.menu.ServerConfigurationMenu;
 import net.pandamc.core.util.menu.Button;
-import net.pandamc.core.util.redis.impl.Payload;
-import net.pandamc.core.util.redis.util.RedisMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

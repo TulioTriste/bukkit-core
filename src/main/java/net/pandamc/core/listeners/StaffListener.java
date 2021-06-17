@@ -1,6 +1,7 @@
 package net.pandamc.core.listeners;
 
 import net.pandamc.core.Core;
+import net.pandamc.core.commands.AdminChatCommand;
 import net.pandamc.core.commands.StaffChatCommand;
 import net.pandamc.core.util.redis.impl.Payload;
 import net.pandamc.core.util.redis.util.RedisMessage;
@@ -34,6 +35,16 @@ public class StaffListener implements Listener {
         if (StaffChatCommand.INSTANCE.contains(player.getUniqueId())) {
             event.setCancelled(true);
             String json = new RedisMessage(Payload.STAFF_CHAT)
+                    .setParam("PLAYER", player.getName())
+                    .setParam("PREFIX", plugin.getRankManager().getRankPrefix(player))
+                    .setParam("SERVER", plugin.getServerName())
+                    .setParam("MESSAGE", event.getMessage())
+                    .toJSON();
+            Core.get().getRedisManager().write(json);
+        }
+        else if (AdminChatCommand.INSTANCE.contains(player.getUniqueId())) {
+            event.setCancelled(true);
+            String json = new RedisMessage(Payload.ADMIN_CHAT)
                     .setParam("PLAYER", player.getName())
                     .setParam("PREFIX", plugin.getRankManager().getRankPrefix(player))
                     .setParam("SERVER", plugin.getServerName())
