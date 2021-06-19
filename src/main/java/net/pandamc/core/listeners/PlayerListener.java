@@ -1,14 +1,16 @@
 package net.pandamc.core.listeners;
 
-import lombok.var;
 import net.pandamc.core.Core;
+import net.pandamc.core.nametags.GxNameTag;
+import net.pandamc.core.profile.Profile;
+import net.pandamc.core.util.CC;
+import net.pandamc.core.util.TaskUtil;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,13 +32,43 @@ public class PlayerListener implements Listener {
             "I love PandaMC and the Panda Community plugins are the best!");
 
     @EventHandler
+    public void onAsyncJoin(AsyncPlayerPreLoginEvent event) {
+        Profile profile = new Profile(event.getUniqueId());
+        try {
+            TaskUtil.runLaterAsync(profile::load, 20L);
+            Profile.getProfiles().put(event.getUniqueId(), profile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
+            event.setKickMessage(CC.RED + "Failed to load your profile. Try again later.");
+        }
+    }
+
+    @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
+        Player player = event.getPlayer();
+
+        Profile.get(player.getUniqueId()).setName(player.getName());
+
+        if (Core.get().getMainConfig().getBoolean("NAMETAGS")) {
+            TaskUtil.runAsync(() -> {
+                if (GxNameTag.isInitiated()) {
+                    player.setMetadata("sl-LoggedIn", new FixedMetadataValue(Core.get(), true));
+                    GxNameTag.initiatePlayer(player);
+                    GxNameTag.reloadPlayer(player);
+                    GxNameTag.reloadOthersFor(player);
+                }
+            });
+        }
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
+
+        Profile.get(event.getPlayer().getUniqueId()).save();
+        Profile.getProfiles().remove(event.getPlayer().getUniqueId());
     }
 
     @EventHandler
@@ -46,11 +78,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        var message = event.getMessage();
+        String message = event.getMessage();
 
         if (!event.getPlayer().hasPermission("bukkit.core.staff") || !event.getPlayer().isOp()) {
             blacklist.forEach(words -> {
-                for (var s : message.split(" ")) {
+                for (String s : message.split(" ")) {
                     if (s.toLowerCase().equals(words) || s.toLowerCase().startsWith(words) || s.toLowerCase().endsWith(words)) {
                         event.setMessage(replacer.get(ThreadLocalRandom.current().nextInt(replacer.size())));
                     }

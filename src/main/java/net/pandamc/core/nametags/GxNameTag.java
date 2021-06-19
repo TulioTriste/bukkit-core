@@ -3,9 +3,9 @@ package net.pandamc.core.nametags;
 import com.google.common.primitives.Ints;
 import lombok.Getter;
 import lombok.Setter;
-import net.pandamc.yang.nametags.packets.ScoreboardTeamPacketMod;
-import net.pandamc.yang.nametags.task.NametagTask;
-import net.pandamc.yang.utilities.TaskUtil;
+import net.pandamc.core.nametags.packets.ScoreboardTeamPacketMod;
+import net.pandamc.core.nametags.task.NametagTask;
+import net.pandamc.core.util.TaskUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -14,11 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class GxNameTag {
 
-    @Getter private static Map<String, Map<String, net.pandamc.yang.nametags.NametagInfo>> teamMap = new ConcurrentHashMap<>();
+    @Getter private static Map<String, Map<String, NametagInfo>> teamMap = new ConcurrentHashMap<>();
     @Getter private static boolean initiated = false;
     @Getter @Setter private static boolean async = true;
 
-    private static List<net.pandamc.yang.nametags.NametagInfo> registeredTeams = Collections.synchronizedList(new ArrayList<>());
+    private static List<NametagInfo> registeredTeams = Collections.synchronizedList(new ArrayList<>());
     private static int teamCreateIndex = 1;
     private static List<NametagProvider> providers = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class GxNameTag {
     }
 
     public static void reloadPlayer(Player toRefresh) {
-        net.pandamc.yang.nametags.NametagUpdate update = new net.pandamc.yang.nametags.NametagUpdate(toRefresh);
+        NametagUpdate update = new NametagUpdate(toRefresh);
 
         if (async) NametagTask.getPendingUpdates().put(update, true);
         else applyUpdate(update);
@@ -49,13 +49,13 @@ public class GxNameTag {
     }
 
     public static void reloadPlayer(Player toRefresh, Player refreshFor) {
-        net.pandamc.yang.nametags.NametagUpdate update = new net.pandamc.yang.nametags.NametagUpdate(toRefresh, refreshFor);
+        NametagUpdate update = new NametagUpdate(toRefresh, refreshFor);
 
         if(async) NametagTask.getPendingUpdates().put(update, true);
         else applyUpdate(update);
     }
 
-    public static void applyUpdate(net.pandamc.yang.nametags.NametagUpdate nametagUpdate) {
+    public static void applyUpdate(NametagUpdate nametagUpdate) {
         if (nametagUpdate.getToRefresh() != null){
             Player toRefreshPlayer = Bukkit.getPlayerExact(nametagUpdate.getToRefresh());
 
@@ -74,7 +74,7 @@ public class GxNameTag {
     public static void reloadPlayerInternal(Player toRefresh, Player refreshFor) {
         if(!refreshFor.hasMetadata("sl-LoggedIn")) return;
 
-        net.pandamc.yang.nametags.NametagInfo provided = null;
+        NametagInfo provided = null;
         int providerIndex = 0;
 
         for (NametagProvider nametagProvider : providers) {
@@ -84,7 +84,7 @@ public class GxNameTag {
 
         if (provided == null) return;
 
-        Map<String, net.pandamc.yang.nametags.NametagInfo> teamInfoMap = new HashMap<>();
+        Map<String, NametagInfo> teamInfoMap = new HashMap<>();
         
         if (teamMap.containsKey(refreshFor.getName())) teamInfoMap = teamMap.get(refreshFor.getName());
         
@@ -97,14 +97,14 @@ public class GxNameTag {
         registeredTeams.forEach(teamInfo -> teamInfo.getTeamAddPacket().sendToPlayer(player));
     }
 
-    public static net.pandamc.yang.nametags.NametagInfo getOrCreate(String prefix, String suffix) {
-        for (net.pandamc.yang.nametags.NametagInfo teamInfo : registeredTeams) {
+    public static NametagInfo getOrCreate(String prefix, String suffix) {
+        for (NametagInfo teamInfo : registeredTeams) {
             if (teamInfo.getPrefix().equals(prefix) && teamInfo.getSuffix().equals(suffix)) {
                 return (teamInfo);
             }
         }
 
-        net.pandamc.yang.nametags.NametagInfo newTeam = new net.pandamc.yang.nametags.NametagInfo(String.valueOf(teamCreateIndex++), prefix, suffix);
+        NametagInfo newTeam = new NametagInfo(String.valueOf(teamCreateIndex++), prefix, suffix);
         registeredTeams.add(newTeam);
 
         ScoreboardTeamPacketMod addPacket = newTeam.getTeamAddPacket();

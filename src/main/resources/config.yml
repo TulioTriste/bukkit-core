@@ -1,12 +1,12 @@
 MONGO:
   HOST: 127.0.0.1
   PORT: 27017
-  DATABASE: 'core'
+  DATABASE: 'practice'
   AUTHENTICATION:
-    ENABLED: false
+    ENABLED: true
     USERNAME: root
     PASSWORD: ''
-    AUTHENTICATION: 'admin'
+    DATABASE: 'admin'
 REDIS:
   HOST: 127.0.0.1
   PORT: 6379
@@ -16,3 +16,4 @@ REDIS:
 SERVER: "hub"
 MESSAGE_REPLY_BOOLEAN: false
 ONLINE_DONATORS: true
+NAMETAGS: true

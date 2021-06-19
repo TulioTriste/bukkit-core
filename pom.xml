@@ -62,6 +62,10 @@
             <id>public</id>
             <url>http://haoshoku.xyz:8081/repository/public</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -134,14 +138,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.broustudio.MizuAPI</groupId>
-            <artifactId>MizuAPI</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/MizuAPI.jar</systemPath>
-        </dependency>
-
-        <dependency>
             <groupId>me.quartz.hestia</groupId>
             <artifactId>HestiaAPI</artifactId>
             <version>1.0</version>
@@ -156,10 +152,24 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.12.8</version>
+        </dependency>
+
         <dependency>
             <groupId>net.luckperms</groupId>
             <artifactId>api</artifactId>
             <version>5.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.10.9</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -15,10 +15,6 @@ public class Rank {
             Core.get().setRankManager(new AquaCore());
             Core.get().setRankSystem("AquaCore");
         }
-        else if (Bukkit.getPluginManager().getPlugin("Mizu") != null) {
-            Core.get().setRankManager(new Mizu());
-            Core.get().setRankSystem("Mizu");
-        }
         else if (Bukkit.getPluginManager().getPlugin("HestiaCore") != null) {
             Core.get().setRankManager(new HestiaCore());
             Core.get().setRankSystem("HestiaCore");

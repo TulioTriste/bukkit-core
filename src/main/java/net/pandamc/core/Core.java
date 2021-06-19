@@ -12,11 +12,16 @@ import net.pandamc.core.commands.*;
 import net.pandamc.core.listeners.PlayerListener;
 import net.pandamc.core.listeners.ServerListener;
 import net.pandamc.core.listeners.StaffListener;
+import net.pandamc.core.nametags.GxNameTag;
+import net.pandamc.core.nametags.CoreTags;
+import net.pandamc.core.profile.Profile;
 import net.pandamc.core.rank.Rank;
 import net.pandamc.core.rank.RankManager;
+import net.pandamc.core.tags.Tag;
 import net.pandamc.core.tags.commands.TagCommand;
 import net.pandamc.core.task.VipsOnlineTask;
 import net.pandamc.core.toggle.PrivateMessageCommand;
+import net.pandamc.core.util.PlaceholderAPI;
 import net.pandamc.core.util.TaskUtil;
 import net.pandamc.core.util.command.CommandManager;
 import net.pandamc.core.util.file.type.BasicConfigurationFile;
@@ -24,6 +29,8 @@ import net.pandamc.core.util.menu.MenuListener;
 import net.pandamc.core.util.redis.Redis;
 import net.pandamc.core.util.redis.impl.Payload;
 import net.pandamc.core.util.redis.util.RedisMessage;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -57,6 +64,7 @@ public class Core extends JavaPlugin {
     @Override
     public void onDisable() {
         sendInfoClosed();
+        Profile.getProfiles().forEach((uuid, profile) -> profile.save());
         this.redisManager.disconnect();
     }
 
@@ -69,6 +77,13 @@ public class Core extends JavaPlugin {
     private void registerManagers() {
         this.redisManager = new Redis();
         Rank.init();
+        Tag.init();
+        if (mainConfig.getBoolean("NAMETAGS")) {
+            GxNameTag.hook();
+            GxNameTag.registerProvider(new CoreTags());
+        }
+        Profile.init();
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) new PlaceholderAPI().register();
         this.redisManager.connect();
         this.serverName = getMainConfig().getString("SERVER");
     }
@@ -98,6 +113,9 @@ public class Core extends JavaPlugin {
 
     private void loadTasks() {
         if (mainConfig.getBoolean("ONLINE_DONATORS")) TaskUtil.runTimer(new VipsOnlineTask(), 2400L, 2400L);
+        TaskUtil.runTimer(() -> Bukkit.getOnlinePlayers().forEach(player ->
+                        Bukkit.getOnlinePlayers().forEach(other -> TaskUtil.runAsync(() -> GxNameTag.reloadPlayer(player, other)))),
+                20L, 20L);
     }
 
     public void loadVault() {

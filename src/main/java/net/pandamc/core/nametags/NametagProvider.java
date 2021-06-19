@@ -2,9 +2,8 @@ package net.pandamc.core.nametags;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.pandamc.core.Core;
 import net.pandamc.core.util.CC;
-import net.pandamc.yang.profile.Profile;
-import net.pandamc.yang.utilities.chat.CC;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
@@ -34,7 +33,9 @@ public abstract class NametagProvider {
                     return null;
                 }
             }
-            return (createNametag(Profile.get(toRefresh.getUniqueId()).getColor(), ""));
+            return (createNametag(Core.get().getColoredRanksConfig().get("groups." + Core.get().getRankManager().getRankName(toRefresh)) != null ?
+                    CC.translate(Core.get().getColoredRanksConfig().getString("groups." + Core.get().getRankManager().getRankName(toRefresh)))
+                    : CC.translate("&r"), ""));
         }
     }
 }

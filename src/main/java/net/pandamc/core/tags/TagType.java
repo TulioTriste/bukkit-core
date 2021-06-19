@@ -1,14 +1,17 @@
 package net.pandamc.core.tags;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum TagType {
 
-    CUSTOM,
-    HASHTAG,
-    PREMIUM,
-    PAISES,
-    COMUNES
+    CUSTOM("Customs"),
+    HASHTAG("HashTags"),
+    PREMIUM("Premiums"),
+    PAISES("Paises"),
+    COMUNES("Comunes");
 
+    private final String name;
 }

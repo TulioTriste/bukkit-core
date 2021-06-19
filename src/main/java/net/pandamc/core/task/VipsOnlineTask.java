@@ -21,7 +21,7 @@ public class VipsOnlineTask implements Runnable {
             var message = new StringBuilder();
             vips.forEach(player -> message.append("&c").append(player.getName()).append("&7, "));
             Arrays.asList("",
-                    " &6&lRagnar's &6connected! &7(" + vips.size() + ")",
+                    " &d&lRagnar's &dconnected! &7(" + vips.size() + ")",
                     " &7\u25BA " + message.substring(0, (message.length() - 2)),
                     "")
                     .forEach(lines -> Bukkit.broadcastMessage(CC.translate(lines)));

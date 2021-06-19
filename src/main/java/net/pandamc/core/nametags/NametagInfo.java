@@ -1,7 +1,7 @@
 package net.pandamc.core.nametags;
 
 import lombok.Getter;
-import net.pandamc.yang.nametags.packets.ScoreboardTeamPacketMod;
+import net.pandamc.core.nametags.packets.ScoreboardTeamPacketMod;
 
 import java.util.ArrayList;
 
